@@ -21,8 +21,10 @@ OUTPUT_PATH = os.environ.get("ENTRY_OUTPUT", "/output/entry.txt")
 
 def main() -> None:
     # Gate self-check: /output/entry.txt must be UTF-8 text of
-    # 1 to 200 characters, not only whitespace.
+    # 1 to 200 characters, not only whitespace — and one line:
+    # an embedded newline would split the joke and break the gate.
     assert 1 <= len(LINE) <= 200, f"line is {len(LINE)} chars, gate wants 1-200"
+    assert "\n" not in LINE and "\r" not in LINE, "entry must be a single line"
     assert LINE.strip(), "line must not be only whitespace"
     assert LINE.encode("utf-8").decode("utf-8") == LINE
     directory = os.path.dirname(OUTPUT_PATH)
